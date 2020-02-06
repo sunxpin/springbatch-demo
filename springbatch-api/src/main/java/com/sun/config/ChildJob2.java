@@ -3,7 +3,6 @@ package com.sun.config;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.scope.context.ChunkContext;
@@ -14,35 +13,45 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 单个step的job
+ * 子job2 2个step
  *
- * @Date 2020/2/6 19:07
+ * @Date 2020/2/6 22:41
  */
 @Configuration
-@EnableBatchProcessing
-public class JobConfig {
-
-    @Autowired
-    private JobBuilderFactory jobBuilderFactory;
+public class ChildJob2 {
 
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
 
+    @Autowired
+    private JobBuilderFactory jobBuilderFactory;
+
+
     @Bean
-    public Job helloWorldJob() {
-        return jobBuilderFactory.get("helloWorldJob")
-                .start(step0())
+    public Job childJobTwo() {
+        return jobBuilderFactory.get("childJobTwo")
+                .start(childJob2Step1())
+                .next(childJob2Step2())
                 .build();
     }
 
     @Bean
-    public Step step0() {
-        return stepBuilderFactory.get("step0").tasklet(new Tasklet() {
+    public Step childJob2Step1() {
+        return stepBuilderFactory.get("childJob2Step1").tasklet(new Tasklet() {
             @Override
             public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
-                System.err.println("hello world");
+                System.err.println("childJob2Step1");
+                return RepeatStatus.FINISHED;
+            }
+        }).build();
+    }
 
-                // 任务执行结果状态
+    @Bean
+    public Step childJob2Step2() {
+        return stepBuilderFactory.get("childJob2Step2").tasklet(new Tasklet() {
+            @Override
+            public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
+                System.err.println("childJob2Step2");
                 return RepeatStatus.FINISHED;
             }
         }).build();

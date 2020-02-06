@@ -1,13 +1,19 @@
-
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/springbatch?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
     username: root
     password: 123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    # 初始化系统表
     schema: classpath:/org/springframework/batch/core/schema-mysql.sql
+
   batch:
-    initialize-schema: always
+    # 每次启动重新创建 always
+    initialize-schema: EMBEDDED
+    job:
+      names: parentJob
+
 
 
 

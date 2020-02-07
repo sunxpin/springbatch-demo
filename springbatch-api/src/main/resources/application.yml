@@ -11,8 +11,8 @@ spring:
   batch:
     # 每次启动重新创建 always
     initialize-schema: EMBEDDED
-    job:
-      names: parentJob
+#    job:
+#      names: paramDemoJobs
 
 
 

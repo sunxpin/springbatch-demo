@@ -1,7 +1,7 @@
-package com.sun.config;
+package com.sun.api.demo;
 
-import com.sun.listener.MyCHunkListener;
-import com.sun.listener.MyJobListener;
+import com.sun.api.demo.listener.MyCHunkListener;
+import com.sun.api.demo.listener.MyJobListener;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;

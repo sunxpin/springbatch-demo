@@ -1,4 +1,4 @@
-package com.sun.config;
+package com.sun.api.demo;
 
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;

@@ -1,4 +1,4 @@
-package com.sun.config;
+package com.sun.api.demo;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -14,87 +14,81 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 
 /**
- * step1-|
- *       |---> flow-|
- * step2-|          | ---> job
- *            step3-|
+ * Split 实现flow并发执行
  *
- *
- * Step ----》 StepBuilderFactory
- *
- * Flow ----》 FlowBuilder
- *
- * Job  ----》 JobBuilderFactory
- *
- *
- * @Date 2020/2/6 20:54
+ * @Date 2020/2/6 21:25
  */
 @Configuration
 @EnableBatchProcessing
-public class FlowDemo {
-
-    @Autowired
-    private JobBuilderFactory jobBuilderFactory;
+public class SplitDemo {
 
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
 
+    @Autowired
+    private JobBuilderFactory jobBuilderFactory;
+
     // 1、创建3个Step
     @Bean
-    public Step flowDemoStep1() {
-        return stepBuilderFactory.get("flowDemoStep1").tasklet(new Tasklet() {
+    public Step splitDemoStep1() {
+        return stepBuilderFactory.get("splitDemoStep1").tasklet(new Tasklet() {
             @Override
             public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
-                System.err.println("flowDemoStep1");
+                System.err.println("splitDemoStep1");
                 return RepeatStatus.FINISHED;
             }
         }).build();
     }
 
     @Bean
-    public Step flowDemoStep2() {
-        return stepBuilderFactory.get("flowDemoStep2").tasklet(new Tasklet() {
+    public Step splitDemoStep2() {
+        return stepBuilderFactory.get("splitDemoStep2").tasklet(new Tasklet() {
             @Override
             public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
-                System.err.println("flowDemoStep2");
+                System.err.println("splitDemoStep2");
                 return RepeatStatus.FINISHED;
             }
         }).build();
     }
 
     @Bean
-    public Step flowDemoStep3() {
-        return stepBuilderFactory.get("flowDemoStep3").tasklet(new Tasklet() {
+    public Step splitDemoStep3() {
+        return stepBuilderFactory.get("splitDemoStep3").tasklet(new Tasklet() {
             @Override
             public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
-                System.err.println("flowDemoStep3");
+                System.err.println("splitDemoStep3");
                 return RepeatStatus.FINISHED;
             }
         }).build();
     }
 
-    // 2、根据Step创建Flow
+    // 2、创建2个Flow
     @Bean
-    public Flow flowDemoFlow() {
-        return new FlowBuilder<Flow>("flowDemoFlow")
-                .start(flowDemoStep1())
-                .next(flowDemoStep2())
+    public Flow splitDemoFlow1() {
+        return new FlowBuilder<Flow>("splitDemoFlow1")
+                .start(splitDemoStep3())
+                .next(splitDemoStep2())
                 .end();
     }
 
-    // 3、根据Flow创建Job
     @Bean
-    public Job flowDemoJob() {
-        return jobBuilderFactory.get("flowDemoJob")
-                // 一个Flow和一个Step构成此Job
-                .start(flowDemoFlow())
-                .next(flowDemoStep3())
-                .end()
-                .build();
-
-
+    public Flow splitDemoFlow2() {
+        return new FlowBuilder<Flow>("splitDemoFlow2")
+                .start(splitDemoStep1())
+                .end();
     }
 
+    // 3、并发执行Job
+    @Bean
+    public Job splitDemoJob() {
+        return jobBuilderFactory.get("splitDemoJob")
+                .start(splitDemoFlow1())
+                // TaskExecutor的一般实现类
+                .split(new SimpleAsyncTaskExecutor()).add(splitDemoFlow2())
+                .end()
+                .build();
+    }
 }

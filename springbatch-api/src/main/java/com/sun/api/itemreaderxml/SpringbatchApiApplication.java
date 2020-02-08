@@ -1,4 +1,4 @@
-package com.sun;
+package com.sun.api.itemreaderxml;
 
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;

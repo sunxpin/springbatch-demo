@@ -24,7 +24,11 @@ import java.util.Map;
 
 /**
  * 从数据库读取数据,并自定义ItemWriter将数据输出
+ * 读
  * {@link JdbcPagingItemReader}
+ * <p>
+ * 写
+ * {@link JdbcWriterDemo}
  *
  * @Date 2020/2/8 13:33
  */

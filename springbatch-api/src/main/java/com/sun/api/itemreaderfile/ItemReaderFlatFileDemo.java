@@ -17,9 +17,13 @@ import org.springframework.core.io.ClassPathResource;
 
 /**
  * 从普通文件中读取数据
+ * 读
  * {@link FlatFileItemReader}
  * {@link DelimitedLineTokenizer}
  * {@link DefaultLineMapper}
+ * <p>
+ * 自定义写
+ * {@link FlatFileWriter}
  *
  * @Date 2020/2/8 14:21
  */
@@ -33,7 +37,7 @@ public class ItemReaderFlatFileDemo {
     private StepBuilderFactory stepBuilderFactory;
 
     @Autowired
-    private ItemWriter<? super Customer> flatFileWriter;
+    private ItemWriter<Customer> flatFileWriter;
 
     @Bean
     public Job itemReaderFlatFileDemoJob() {

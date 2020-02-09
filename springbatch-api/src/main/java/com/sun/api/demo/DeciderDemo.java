@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 决策器
+ * 自定义决策器
  *
  * @Date 2020/2/6 22:02
  */
@@ -45,6 +45,15 @@ public class DeciderDemo {
         };
     }
 
+    /**
+     * deciderDemoStep1()执行后进入决策器判断：
+     * 若为奇数则执行 deciderDemoStep3()
+     * 若为偶数则执行 deciderDemoStep2()
+     * 以上2步执行后，
+     * 从 deciderDemoStep3() ，无论结果如何（*） ，回到决策器重新执行
+     *
+     * @return
+     */
     @Bean
     public Job deciderDemoJob() {
         return jobBuilderFactory.get("deciderDemoJob")
@@ -52,7 +61,7 @@ public class DeciderDemo {
                 .next(myDecider())
                 .from(myDecider()).on("odd").to(deciderDemoStep3())
                 .from(myDecider()).on("even").to(deciderDemoStep2())
-                .from(deciderDemoStep1()).on("*").to(myDecider())
+                .from(deciderDemoStep3()).on("*").to(myDecider())
                 .end()
                 .build();
     }

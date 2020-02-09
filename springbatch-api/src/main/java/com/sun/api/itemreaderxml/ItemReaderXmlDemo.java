@@ -11,13 +11,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.oxm.Unmarshaller;
 import org.springframework.oxm.xstream.XStreamMarshaller;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * xml文件读取
+ * 从xml文件读取
+ * 读
+ * {@link StaxEventItemReader#setUnmarshaller(Unmarshaller)}
+ * {@link XStreamMarshaller}
+ * <p>
+ * 写
+ * {@link org.springframework.batch.item.support.ListItemWriter}
  *
  * @Date 2020/2/8 15:13
  */

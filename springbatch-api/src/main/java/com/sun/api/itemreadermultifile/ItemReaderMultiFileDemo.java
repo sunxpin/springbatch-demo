@@ -21,6 +21,13 @@ import org.springframework.core.io.Resource;
 
 /**
  * 读取多个文件,需要依赖单个文件的读取
+ * <p>
+ * 读
+ * {@link MultiResourceItemReader}
+ * {@link FlatFileItemReader}
+ * <p>
+ * 写
+ * {@link MultiFileWriterDemo}
  *
  * @Date 2020/2/8 15:45
  */
